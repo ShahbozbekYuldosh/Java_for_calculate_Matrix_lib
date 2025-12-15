@@ -6,171 +6,143 @@ public class CalculateMatrix {
 
     private int rows_;
     private int cols_;
-    private int[][] matrix;
+    private double[][] matrix;
 
+    // =======================
+    // Constructors
+    // =======================
     public CalculateMatrix() {
         this.rows_ = 2;
         this.cols_ = 2;
-        this.matrix = new int[rows_][cols_];
+        this.matrix = new double[rows_][cols_];
     }
 
-    public CalculateMatrix(int rows_, int cols_) {
-        if (rows_ <= 0 || cols_ <= 0) {
+    public CalculateMatrix(int rows, int cols) {
+        if (rows <= 0 || cols <= 0)
             throw new IllegalArgumentException("Rows and Columns must be greater than 0");
-        }
-        this.rows_ = rows_;
-        this.cols_ = cols_;
-        this.matrix = new int[rows_][cols_];
+        this.rows_ = rows;
+        this.cols_ = cols;
+        this.matrix = new double[rows][cols];
     }
 
     public CalculateMatrix(CalculateMatrix other) {
         this.rows_ = other.rows_;
         this.cols_ = other.cols_;
-        this.matrix = new int[rows_][cols_];
+        this.matrix = new double[rows_][cols_];
         for (int i = 0; i < rows_; i++) {
             this.matrix[i] = Arrays.copyOf(other.matrix[i], cols_);
         }
     }
 
-    public int getRows_() {
-        return rows_;
-    }
+    // =======================
+    // Getters and Setters
+    // =======================
+    public int getRows_() { return rows_; }
 
     public void setRows_(int rows) {
         if (rows <= 0) throw new IllegalArgumentException("Rows must be greater than 0");
-        int[][] newMatrix = new int[rows][cols_];
+        double[][] newMatrix = new double[rows][cols_];
         for (int i = 0; i < Math.min(rows, rows_); i++) {
-            newMatrix[i] = Arrays.copyOf(this.matrix[i], cols_);
+            newMatrix[i] = Arrays.copyOf(matrix[i], cols_);
         }
         this.rows_ = rows;
         this.matrix = newMatrix;
     }
 
-    public int getCols_() {
-        return cols_;
-    }
+    public int getCols_() { return cols_; }
 
     public void setCols_(int cols) {
-        if (cols <= 0) throw new IllegalArgumentException("Column must be greater than 0");
-        int[][] newMatrix = new int[rows_][cols];
+        if (cols <= 0) throw new IllegalArgumentException("Columns must be greater than 0");
+        double[][] newMatrix = new double[rows_][cols];
         for (int i = 0; i < rows_; i++) {
-            newMatrix[i] = Arrays.copyOf(this.matrix[i], cols_);
+            newMatrix[i] = Arrays.copyOf(matrix[i], cols);
         }
         this.cols_ = cols;
         this.matrix = newMatrix;
     }
-//--------------------------------------------------------------------------------------------------
 
-    public int get(int i, int j) {
-        if (i < 0 || i >= rows_ || j < 0 || j >= cols_) {
+    public double get(int i, int j) {
+        if (i < 0 || i >= rows_ || j < 0 || j >= cols_)
             throw new IllegalArgumentException("Index out of bounds");
-        }
         return matrix[i][j];
     }
 
-    public void set(int i, int j, int value) {
-        if (i < 0 || i >= rows_ || j < 0 || j >= cols_) {
+    public void set(int i, int j, double value) {
+        if (i < 0 || i >= rows_ || j < 0 || j >= cols_)
             throw new IllegalArgumentException("Index out of bounds");
-        }
         matrix[i][j] = value;
     }
-//--------------------------------------------------------------------------------------------------
 
+    // =======================
+    // Matrix operations
+    // =======================
     public boolean eqMatrix(CalculateMatrix other) {
-//        TODO: Tenglikni tekshirish kerak!
-        return false;
+        if (this.rows_ != other.rows_ || this.cols_ != other.cols_) return false;
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                if (this.matrix[i][j] != other.matrix[i][j]) return false;
+            }
+        }
+        return true;
     }
 
     public void sumMatrix(CalculateMatrix other) {
-        // TODO: Qo'shish
-        if (rows_ != other.rows_ || cols_ != other.cols_) {
+        if (rows_ != other.rows_ || cols_ != other.cols_)
             throw new IllegalArgumentException("Matrices dimensions must match for addition");
-        }
-
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
+        for (int i = 0; i < rows_; i++)
+            for (int j = 0; j < cols_; j++)
                 matrix[i][j] += other.matrix[i][j];
-            }
-        }
     }
 
     public void subMatrix(CalculateMatrix other) {
-        // TODO: Ayirish
-
-        if (rows_ != other.rows_ || cols_ != other.cols_) {
+        if (rows_ != other.rows_ || cols_ != other.cols_)
             throw new IllegalArgumentException("Matrices dimensions must match for subtraction");
-        }
-
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
+        for (int i = 0; i < rows_; i++)
+            for (int j = 0; j < cols_; j++)
                 matrix[i][j] -= other.matrix[i][j];
-            }
-        }
     }
 
-    public void mulNumber(int num) {
-        // TODO: Skalyar bilan ko'paytirish
-
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < cols_; j++) {
+    public void mulNumber(double num) {
+        for (int i = 0; i < rows_; i++)
+            for (int j = 0; j < cols_; j++)
                 matrix[i][j] *= num;
-            }
-        }
     }
 
     public void mulMatrix(CalculateMatrix other) {
-        // TODO: Matritsa ko'paytmasi
-
-        if (cols_ != other.rows_) {
+        if (cols_ != other.rows_)
             throw new IllegalArgumentException("Number of columns of first matrix must equal number of rows of second matrix");
-        }
 
-        int [][] result = new int[rows_][other.cols_];
-        for (int i = 0; i < rows_; i++) {
-            for (int j = 0; j < other.cols_; j++) {
-                for (int k = 0; k < cols_; k++) {
+        double[][] result = new double[rows_][other.cols_];
+        for (int i = 0; i < rows_; i++)
+            for (int j = 0; j < other.cols_; j++)
+                for (int k = 0; k < cols_; k++)
                     result[i][j] += matrix[i][k] * other.matrix[k][j];
-                }
-            }
-        }
+
         this.cols_ = other.cols_;
         this.matrix = result;
     }
 
     public CalculateMatrix transpose() {
-        // TODO: Transpozitsiya
-
-        CalculateMatrix result = new CalculateMatrix(this.rows_, this.cols_);
-
-        for (int i = 0; i < this.rows_; i++) {
-            for (int j = 0; j < this.cols_; j++) {
-                result.matrix[i][j] = this.matrix[i][j];
-            }
-        }
+        CalculateMatrix result = new CalculateMatrix(cols_, rows_);
+        for (int i = 0; i < rows_; i++)
+            for (int j = 0; j < cols_; j++)
+                result.matrix[j][i] = matrix[i][j];
         return result;
     }
 
-    public int determinant() {
-        // TODO: Determinant
-
-        if (rows_ != cols_) {
-            throw new IllegalArgumentException("Matrix must be square to calculate determinant");
-        }
-
-        return calculateDeterminant(this.matrix);
+    public double determinant() {
+        if (rows_ != cols_) throw new IllegalArgumentException("Matrix must be square to calculate determinant");
+        return calculateDeterminant(matrix);
     }
 
-    private int calculateDeterminant(int[][] mat) {
+    private double calculateDeterminant(double[][] mat) {
         int n = mat.length;
-
         if (n == 1) return mat[0][0];
-        if (n == 2) return mat[0][0] * mat[1][1] -  mat[0][1] * mat[1][0];
+        if (n == 2) return mat[0][0]*mat[1][1] - mat[0][1]*mat[1][0];
 
-        int det = 0;
-
+        double det = 0.0;
         for (int col = 0; col < n; col++) {
-            int[][] subMatrix = new int[n-1][n-1];
-
+            double[][] subMatrix = new double[n-1][n-1];
             for (int i = 1; i < n; i++) {
                 int subCol = 0;
                 for (int j = 0; j < n; j++) {
@@ -185,54 +157,43 @@ public class CalculateMatrix {
     }
 
     public CalculateMatrix calcComplements() {
-        // TODO: Algebraik komplementlar
+        if (rows_ != cols_) throw new IllegalArgumentException("Matrix must be square to calculate complements");
 
-        if  (rows_ != cols_) {
-            throw new IllegalArgumentException("Matrix must be square to calculate complements");
-        }
-
-        CalculateMatrix result = new CalculateMatrix(this.rows_, this.cols_);
-
-        for (int i = 0; i < this.rows_; i++) {
-            for (int j = 0; j < this.cols_; j++) {
-                int[][] subMatrix = new int[this.rows_-1][this.cols_-1];
+        CalculateMatrix result = new CalculateMatrix(rows_, cols_);
+        for (int i = 0; i < rows_; i++) {
+            for (int j = 0; j < cols_; j++) {
+                double[][] subMatrix = new double[rows_-1][cols_-1];
                 int r = 0;
-                for (int row = 0; row < this.rows_; row++) {
+                for (int row = 0; row < rows_; row++) {
                     if (row == i) continue;
                     int c = 0;
-                    for (int col = 0; col < this.cols_; col++) {
+                    for (int col = 0; col < cols_; col++) {
                         if (col == j) continue;
                         subMatrix[r][c] = matrix[row][col];
                         c++;
                     }
                     r++;
                 }
-                result.matrix[i][j] = (int) (Math.pow(-1, i+j) * calculateDeterminant(subMatrix));
+                result.matrix[i][j] = Math.pow(-1, i+j) * calculateDeterminant(subMatrix);
             }
         }
         return result;
     }
 
     public CalculateMatrix inverseMatrix() {
-      //  TODO: Inversiya
-
-        int det = this.determinant();
-        if (det == 0) {
-            throw new IllegalArgumentException("Matrix determinant is zero, inverse does not exist");
-        }
+        double det = this.determinant();
+        if (det == 0) throw new ArithmeticException("Matrix determinant is zero, inverse does not exist");
 
         CalculateMatrix complements = this.calcComplements();
-
         CalculateMatrix adjugate = complements.transpose();
-
-        adjugate.mulNumber(1 / det);
+        adjugate.mulNumber(1.0 / det);
 
         return adjugate;
     }
 
-//--------------------------------------------------------------------------------------------------
-
-
+    // =======================
+    // toString
+    // =======================
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -241,6 +202,4 @@ public class CalculateMatrix {
         }
         return sb.toString();
     }
-
 }
-
