@@ -187,13 +187,47 @@ public class CalculateMatrix {
     public CalculateMatrix calcComplements() {
         // TODO: Algebraik komplementlar
 
+        if  (rows_ != cols_) {
+            throw new IllegalArgumentException("Matrix must be square to calculate complements");
+        }
 
-        return null;
+        CalculateMatrix result = new CalculateMatrix(this.rows_, this.cols_);
+
+        for (int i = 0; i < this.rows_; i++) {
+            for (int j = 0; j < this.cols_; j++) {
+                int[][] subMatrix = new int[this.rows_-1][this.cols_-1];
+                int r = 0;
+                for (int row = 0; row < this.rows_; row++) {
+                    if (row == i) continue;
+                    int c = 0;
+                    for (int col = 0; col < this.cols_; col++) {
+                        if (col == j) continue;
+                        subMatrix[r][c] = matrix[row][col];
+                        c++;
+                    }
+                    r++;
+                }
+                result.matrix[i][j] = (int) (Math.pow(-1, i+j) * calculateDeterminant(subMatrix));
+            }
+        }
+        return result;
     }
 
     public CalculateMatrix inverseMatrix() {
       //  TODO: Inversiya
-        return null;
+
+        int det = this.determinant();
+        if (det == 0) {
+            throw new IllegalArgumentException("Matrix determinant is zero, inverse does not exist");
+        }
+
+        CalculateMatrix complements = this.calcComplements();
+
+        CalculateMatrix adjugate = complements.transpose();
+
+        adjugate.mulNumber(1 / det);
+
+        return adjugate;
     }
 
 //--------------------------------------------------------------------------------------------------
